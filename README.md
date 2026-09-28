@@ -58,3 +58,4 @@ python -m scripts.evaluate --config config/vit_cifar10.yaml --checkpoint <checkp
 ## Notes
 The original coursework code was reorganized into a reusable portfolio structure. Local absolute paths and hard-coded run timestamps were removed.
 
+

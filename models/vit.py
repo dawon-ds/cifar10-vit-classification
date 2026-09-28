@@ -8,3 +8,4 @@ def build_model(model_name: str, num_labels: int = 10):
         num_labels=num_labels,
         ignore_mismatched_sizes=True,
     )
+

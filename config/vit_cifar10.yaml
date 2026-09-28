@@ -19,3 +19,4 @@ training:
 
 output:
   dir: runs/vit_cifar10
+

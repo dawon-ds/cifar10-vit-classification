@@ -1,0 +1,21 @@
+seed: 54321
+
+data:
+  dataset: cifar10
+  train_size: 45000
+  val_size: 5000
+  image_size: 224
+
+model:
+  name: google/vit-base-patch16-224-in21k
+  num_labels: 10
+
+training:
+  batch_size: 16
+  learning_rate: 3.0e-5
+  epochs: 3
+  weight_decay: 5.0e-5
+  scheduler: cosine
+
+output:
+  dir: runs/vit_cifar10

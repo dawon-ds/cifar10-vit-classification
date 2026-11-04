@@ -86,3 +86,10 @@ The pipeline saves each epoch rather than selecting a best checkpoint automatica
 ## Review
 
 This project provided experience adapting pretrained image Transformers, handling image preprocessing, and coordinating fine-tuning with learning-rate scheduling.
+
+## Data and Third-party Resources
+
+- **Data:** [CIFAR-10](https://www.cs.toronto.edu/~kriz/cifar.html), downloaded through Torchvision; check source terms before redistributing images.
+- **Model:** pretrained ViT weights are loaded from the Hugging Face model ID in the configuration and are subject to the publisher's terms. The displayed accuracy predates the validation-transform correction.
+
+Dependency lists are in `requirements.txt`; unless versions are explicitly pinned there, they do not reproduce an exact historical software environment. No redistribution permission for third-party inputs is implied by this repository.

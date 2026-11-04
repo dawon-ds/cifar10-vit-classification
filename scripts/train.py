@@ -5,7 +5,7 @@ import random
 import numpy as np
 import torch
 import yaml
-from torch.utils.data import DataLoader, random_split
+from torch.utils.data import DataLoader, Subset
 from torchvision import datasets, transforms
 from transformers import AutoImageProcessor, get_cosine_schedule_with_warmup
 from tqdm import tqdm
@@ -47,14 +47,21 @@ def main():
         transforms.Normalize(mean=mean, std=std),
     ])
 
-    dataset = datasets.CIFAR10(root="data", train=True, download=True, transform=train_transform)
+    val_transform = transforms.Compose([
+        transforms.Resize((image_size, image_size)),
+        transforms.ToTensor(),
+        transforms.Normalize(mean=mean, std=std),
+    ])
+
+    train_data = datasets.CIFAR10(root="data", train=True, download=True, transform=train_transform)
+    val_data = datasets.CIFAR10(root="data", train=True, download=False, transform=val_transform)
     train_size = cfg["data"]["train_size"]
     val_size = cfg["data"]["val_size"]
-    train_set, val_set = random_split(
-        dataset,
-        [train_size, val_size],
-        generator=torch.Generator().manual_seed(cfg["seed"]),
-    )
+    if train_size + val_size != len(train_data):
+        raise ValueError("Configured train_size + val_size must equal the CIFAR-10 training size.")
+    indices = torch.randperm(len(train_data), generator=torch.Generator().manual_seed(cfg["seed"]))
+    train_set = Subset(train_data, indices[:train_size].tolist())
+    val_set = Subset(val_data, indices[train_size:].tolist())
 
     batch_size = cfg["training"]["batch_size"]
     train_loader = DataLoader(train_set, batch_size=batch_size, shuffle=True, num_workers=2)

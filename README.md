@@ -35,6 +35,8 @@ Checkpoints are saved as `runs/vit_cifar10/epoch_<n>.pth`. Pass one of these pat
 
 ### Interpretation
 
+**Evaluation caveat:** the current validation subset uses randomized training transforms, so the recorded validation accuracies are not from a strictly deterministic validation pipeline.
+
 Setting #2 has a reported validation accuracy **0.40 percentage points** higher than Setting #1. Epoch count and weight decay change together, so the comparison does not isolate a single factor.
 
 ## Repository Structure

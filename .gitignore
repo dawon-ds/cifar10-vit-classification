@@ -6,4 +6,6 @@ data/
 runs/
 *.pth
 .DS_Store
-
+.env
+.env.*
+!.env.example

@@ -35,7 +35,7 @@ Checkpoints are saved as `runs/vit_cifar10/epoch_<n>.pth`. Pass one of these pat
 
 ### Interpretation
 
-**Evaluation caveat:** the current validation subset uses randomized training transforms, so the recorded validation accuracies are not from a strictly deterministic validation pipeline.
+**Evaluation caveat:** the reported validation accuracies were obtained before the validation-transform correction. The updated code uses deterministic validation transforms; new results require retraining.
 
 Setting #2 has a reported validation accuracy **0.40 percentage points** higher than Setting #1. Epoch count and weight decay change together, so the comparison does not isolate a single factor.
 
@@ -79,7 +79,7 @@ python -m scripts.evaluate --config config/vit_cifar10.yaml --checkpoint <checkp
 
 ## Limitations
 
-The current training code splits one dataset instance carrying random crop/flip transforms. As a result, **validation also receives random augmentation**, making repeated validation scores less stable. A follow-up experiment should use a separate validation dataset with deterministic transforms.
+The current training code uses **separate training and validation dataset instances** sharing a seeded index split. Only training uses random crop/flip; validation uses deterministic resize and normalization. The historical accuracy values above were recorded before this correction and have not been re-measured.
 
 The pipeline saves each epoch rather than selecting a best checkpoint automatically. The reported validation scores should not be compared directly with another project's test accuracy without matching datasets and evaluation protocols.
 

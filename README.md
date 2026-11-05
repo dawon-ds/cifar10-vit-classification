@@ -1,5 +1,7 @@
 # CIFAR-10 Image Classification with Vision Transformer
 
+[Portfolio Page](https://app.notion.com/p/3e968564df5a81de83eded127aa1047f)
+
 Fine-tuned a pre-trained Vision Transformer (ViT) for CIFAR-10 image classification.
 
 

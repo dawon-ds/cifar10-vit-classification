@@ -6,18 +6,29 @@ Fine-tuned pretrained Vision Transformer (ViT) `google/vit-base-patch16-224-in21
 
 ## Approach
 
-**Technologies:** Python, PyTorch, Hugging Face Transformers, Torchvision.
+**Technologies:** Python, PyTorch, Torchvision, Hugging Face Transformers.
 
-- **Data:** Seeded split of 45,000 training and 5,000 validation images from CIFAR-10's training partition.
-- **Preprocessing:** Resize 32×32 images to 224×224 and normalize with the pretrained image processor's statistics. Random crop and horizontal flip are used for training only.
-- **Model:** Adapt the pretrained ViT classification head to 10 CIFAR-10 labels.
-- **Training:** Adam, batch size 16, learning rate 3e-5, cosine scheduler with zero warmup steps.
+### 1. Data preparation
 
-The separate evaluation script uses the official CIFAR-10 test partition with deterministic preprocessing.
+CIFAR-10 provides 50,000 training images and a separate 10,000-image test partition. The training script uses a seeded split (seed 54321) of the training partition into **45,000 training** and **5,000 validation** images.
 
-The default YAML corresponds to Setting #2. To reproduce the assignment's Setting #1 configuration, use one epoch and confirm its original weight-decay value; the historical result table does not specify that value.
+- **Input processing:** Resize each 32×32 image to **224×224** and normalize using the pretrained model's image processor statistics.
+- **Training augmentation:** Apply random horizontal flips and random crops with 16-pixel padding.
+- **Validation processing:** Use a separate dataset instance with deterministic resize and normalization, without random augmentation.
 
-Checkpoints are saved as `runs/vit_cifar10/epoch_<n>.pth`. Pass one of these paths to the evaluation command. Torchvision downloads CIFAR-10; the pretrained model and processor also require initial download access or a local cache.
+### 2. Model and fine-tuning
+
+The pipeline loads `google/vit-base-patch16-224-in21k` with Hugging Face's `ViTForImageClassification`. Its classification head is configured for **10 CIFAR-10 classes**, using `ignore_mismatched_sizes=True` when loading pretrained weights.
+
+The training loop processes batches of **16** with Adam (learning rate **3e-5**) and a **cosine learning-rate scheduler** with no warmup. Each step computes the model's supervised classification loss, updates the weights through backpropagation, and advances the scheduler.
+
+After each epoch, the model switches to evaluation mode, calculates validation accuracy from predicted classes, and saves its weights to `runs/vit_cifar10/epoch_<n>.pth`.
+
+### 3. Experiment configuration and evaluation
+
+Two fine-tuning settings were compared: **Setting #1** used one epoch; **Setting #2** used three epochs and weight decay **5e-5**. The original weight-decay value for Setting #1 is not recorded. The included YAML config specifies Setting #2.
+
+The separate evaluation script loads a specified checkpoint and evaluates it on the **official CIFAR-10 test partition** with deterministic preprocessing. This test evaluation is separate from the validation scores presented below. The pretrained weights, image processor, and CIFAR-10 data require initial download access or locally cached files.
 
 ## Results
 

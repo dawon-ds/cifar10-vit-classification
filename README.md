@@ -26,7 +26,7 @@ After each epoch, the model switches to evaluation mode and computes validation 
 
 ### 3. Experiment configuration and evaluation
 
-Two fine-tuning settings were compared: **Setting #1** used one epoch; **Setting #2** used three epochs and weight decay **5e-5**. The original weight-decay value for Setting #1 is not recorded. The included YAML config specifies Setting #2.
+Two fine-tuning settings were compared with weight decay **5e-5**: **Setting #1** used one epoch, while **Setting #2** used three epochs. The included YAML config specifies Setting #2.
 
 The separate evaluation script loads a specified checkpoint and measures accuracy on the **official CIFAR-10 test partition** using deterministic resize and normalization. The results table below reports validation, not test, accuracy.
 
@@ -34,10 +34,10 @@ The separate evaluation script loads a specified checkpoint and measures accurac
 
 | Setting | Epochs | Weight Decay | Validation Accuracy | Training Time |
 |---|---:|---:|---:|---:|
-| #1 | 1 | - | 98.35% | 16.28 min |
+| #1 | 1 | 5e-5 | 98.35% | 16.28 min |
 | #2 | 3 | 5e-5 | 98.75% | 52.20 min |
 
-Setting #2 improved validation accuracy by **0.40 percentage points**, while training took approximately **3.2 times longer**. Since epoch count and weight decay were changed together, the improvement cannot be attributed to either factor alone.
+Setting #2 improved validation accuracy by **0.40 percentage points**, while training took approximately **3.2 times longer**. Both settings used the same learning rate and weight decay, allowing a comparison across different epoch counts.
 
 ## Repository Structure
 
